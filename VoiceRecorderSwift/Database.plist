@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<array>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File7</string>
+		<key>audioLength</key>
+		<string>00:01.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File6</string>
+		<key>audioLength</key>
+		<string>00:08.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File5</string>
+		<key>audioLength</key>
+		<string>00:12.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File4</string>
+		<key>audioLength</key>
+		<string>00:02.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File3</string>
+		<key>audioLength</key>
+		<string>00:20.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File2</string>
+		<key>audioLength</key>
+		<string>00:00.55</string>
+	</dict>
+	<dict>
+		<key>audioName</key>
+		<string>Test Audio File1</string>
+		<key>audioLength</key>
+		<string>00:04.55</string>
+	</dict>
+</array>
+</plist>

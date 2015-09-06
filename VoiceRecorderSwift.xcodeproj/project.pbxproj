@@ -9,10 +9,19 @@
 /* Begin PBXBuildFile section */
 		2C50759E1B9AEBFD000DA0DD /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C50759D1B9AEBFD000DA0DD /* AppDelegate.swift */; };
 		2C5075A01B9AEBFD000DA0DD /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C50759F1B9AEBFD000DA0DD /* ViewController.swift */; };
-		2C5075A31B9AEBFD000DA0DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075A11B9AEBFD000DA0DD /* Main.storyboard */; };
 		2C5075A51B9AEBFD000DA0DD /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075A41B9AEBFD000DA0DD /* Images.xcassets */; };
 		2C5075A81B9AEBFD000DA0DD /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075A61B9AEBFD000DA0DD /* LaunchScreen.xib */; };
 		2C5075B41B9AEBFD000DA0DD /* VoiceRecorderSwiftTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075B31B9AEBFD000DA0DD /* VoiceRecorderSwiftTests.swift */; };
+		2C5075BE1B9AEC29000DA0DD /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075BD1B9AEC29000DA0DD /* Main.storyboard */; };
+		2C5075C01B9AED40000DA0DD /* AudioRecorderViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075BF1B9AED40000DA0DD /* AudioRecorderViewController.swift */; };
+		2C5075C21B9AED51000DA0DD /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075C11B9AED51000DA0DD /* AudioPlayerViewController.swift */; };
+		2C5075C61B9AEF00000DA0DD /* RecordTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075C51B9AEF00000DA0DD /* RecordTableCell.swift */; };
+		2C5075C81B9AF603000DA0DD /* Database.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075C71B9AF603000DA0DD /* Database.plist */; };
+		2C5075CB1B9AF742000DA0DD /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075CA1B9AF742000DA0DD /* Functions.swift */; };
+		2C687CB11B9B0CDD00F2BD50 /* ListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */; };
+		2C687CB41B9B0D1700F2BD50 /* AudioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB31B9B0D1700F2BD50 /* AudioItem.swift */; };
+		2C687CB61B9B0DB200F2BD50 /* AudioList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB51B9B0DB200F2BD50 /* AudioList.swift */; };
+		2C687CB81B9B120000F2BD50 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB71B9B120000F2BD50 /* Constants.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -30,12 +39,21 @@
 		2C50759C1B9AEBFD000DA0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C50759D1B9AEBFD000DA0DD /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		2C50759F1B9AEBFD000DA0DD /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
-		2C5075A21B9AEBFD000DA0DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		2C5075A41B9AEBFD000DA0DD /* Images.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Images.xcassets; sourceTree = "<group>"; };
 		2C5075A71B9AEBFD000DA0DD /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.xib; name = Base; path = Base.lproj/LaunchScreen.xib; sourceTree = "<group>"; };
 		2C5075AD1B9AEBFD000DA0DD /* VoiceRecorderSwiftTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = VoiceRecorderSwiftTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		2C5075B21B9AEBFD000DA0DD /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2C5075B31B9AEBFD000DA0DD /* VoiceRecorderSwiftTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VoiceRecorderSwiftTests.swift; sourceTree = "<group>"; };
+		2C5075BD1B9AEC29000DA0DD /* Main.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		2C5075BF1B9AED40000DA0DD /* AudioRecorderViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioRecorderViewController.swift; sourceTree = "<group>"; };
+		2C5075C11B9AED51000DA0DD /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
+		2C5075C51B9AEF00000DA0DD /* RecordTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordTableCell.swift; sourceTree = "<group>"; };
+		2C5075C71B9AF603000DA0DD /* Database.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Database.plist; sourceTree = "<group>"; };
+		2C5075CA1B9AF742000DA0DD /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListParser.swift; sourceTree = "<group>"; };
+		2C687CB31B9B0D1700F2BD50 /* AudioItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioItem.swift; sourceTree = "<group>"; };
+		2C687CB51B9B0DB200F2BD50 /* AudioList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioList.swift; sourceTree = "<group>"; };
+		2C687CB71B9B120000F2BD50 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -77,11 +95,10 @@
 		2C50759A1B9AEBFD000DA0DD /* VoiceRecorderSwift */ = {
 			isa = PBXGroup;
 			children = (
-				2C50759D1B9AEBFD000DA0DD /* AppDelegate.swift */,
-				2C50759F1B9AEBFD000DA0DD /* ViewController.swift */,
-				2C5075A11B9AEBFD000DA0DD /* Main.storyboard */,
-				2C5075A41B9AEBFD000DA0DD /* Images.xcassets */,
-				2C5075A61B9AEBFD000DA0DD /* LaunchScreen.xib */,
+				2C687CB21B9B0D0100F2BD50 /* Model */,
+				2C5075C41B9AED74000DA0DD /* Views */,
+				2C5075C31B9AED65000DA0DD /* Controllers */,
+				2C5075C91B9AF72F000DA0DD /* Helpers */,
 				2C50759B1B9AEBFD000DA0DD /* Supporting Files */,
 			);
 			path = VoiceRecorderSwift;
@@ -90,7 +107,11 @@
 		2C50759B1B9AEBFD000DA0DD /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				2C50759D1B9AEBFD000DA0DD /* AppDelegate.swift */,
+				2C5075A41B9AEBFD000DA0DD /* Images.xcassets */,
+				2C5075C71B9AF603000DA0DD /* Database.plist */,
 				2C50759C1B9AEBFD000DA0DD /* Info.plist */,
+				2C5075A61B9AEBFD000DA0DD /* LaunchScreen.xib */,
 			);
 			name = "Supporting Files";
 			sourceTree = "<group>";
@@ -110,6 +131,44 @@
 				2C5075B21B9AEBFD000DA0DD /* Info.plist */,
 			);
 			name = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		2C5075C31B9AED65000DA0DD /* Controllers */ = {
+			isa = PBXGroup;
+			children = (
+				2C50759F1B9AEBFD000DA0DD /* ViewController.swift */,
+				2C5075BF1B9AED40000DA0DD /* AudioRecorderViewController.swift */,
+				2C5075C11B9AED51000DA0DD /* AudioPlayerViewController.swift */,
+			);
+			name = Controllers;
+			sourceTree = "<group>";
+		};
+		2C5075C41B9AED74000DA0DD /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				2C5075BD1B9AEC29000DA0DD /* Main.storyboard */,
+				2C5075C51B9AEF00000DA0DD /* RecordTableCell.swift */,
+			);
+			name = Views;
+			sourceTree = "<group>";
+		};
+		2C5075C91B9AF72F000DA0DD /* Helpers */ = {
+			isa = PBXGroup;
+			children = (
+				2C687CB71B9B120000F2BD50 /* Constants.swift */,
+				2C5075CA1B9AF742000DA0DD /* Functions.swift */,
+				2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */,
+			);
+			name = Helpers;
+			sourceTree = "<group>";
+		};
+		2C687CB21B9B0D0100F2BD50 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				2C687CB31B9B0D1700F2BD50 /* AudioItem.swift */,
+				2C687CB51B9B0DB200F2BD50 /* AudioList.swift */,
+			);
+			name = Model;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -192,7 +251,8 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				2C5075A31B9AEBFD000DA0DD /* Main.storyboard in Resources */,
+				2C5075BE1B9AEC29000DA0DD /* Main.storyboard in Resources */,
+				2C5075C81B9AF603000DA0DD /* Database.plist in Resources */,
 				2C5075A81B9AEBFD000DA0DD /* LaunchScreen.xib in Resources */,
 				2C5075A51B9AEBFD000DA0DD /* Images.xcassets in Resources */,
 			);
@@ -212,8 +272,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				2C687CB61B9B0DB200F2BD50 /* AudioList.swift in Sources */,
+				2C5075C21B9AED51000DA0DD /* AudioPlayerViewController.swift in Sources */,
+				2C687CB11B9B0CDD00F2BD50 /* ListParser.swift in Sources */,
 				2C5075A01B9AEBFD000DA0DD /* ViewController.swift in Sources */,
+				2C687CB41B9B0D1700F2BD50 /* AudioItem.swift in Sources */,
+				2C687CB81B9B120000F2BD50 /* Constants.swift in Sources */,
+				2C5075C01B9AED40000DA0DD /* AudioRecorderViewController.swift in Sources */,
+				2C5075C61B9AEF00000DA0DD /* RecordTableCell.swift in Sources */,
 				2C50759E1B9AEBFD000DA0DD /* AppDelegate.swift in Sources */,
+				2C5075CB1B9AF742000DA0DD /* Functions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -236,14 +304,6 @@
 /* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
-		2C5075A11B9AEBFD000DA0DD /* Main.storyboard */ = {
-			isa = PBXVariantGroup;
-			children = (
-				2C5075A21B9AEBFD000DA0DD /* Base */,
-			);
-			name = Main.storyboard;
-			sourceTree = "<group>";
-		};
 		2C5075A61B9AEBFD000DA0DD /* LaunchScreen.xib */ = {
 			isa = PBXVariantGroup;
 			children = (
@@ -342,9 +402,12 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				GCC_PREPROCESSOR_DEFINITIONS = "$(inherited)";
 				INFOPLIST_FILE = VoiceRecorderSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				OTHER_SWIFT_FLAGS = "-D DEBUG";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -355,6 +418,7 @@
 				INFOPLIST_FILE = VoiceRecorderSwift/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};
@@ -411,6 +475,7 @@
 				2C5075B91B9AEBFD000DA0DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		2C5075BA1B9AEBFD000DA0DD /* Build configuration list for PBXNativeTarget "VoiceRecorderSwiftTests" */ = {
 			isa = XCConfigurationList;
@@ -419,6 +484,7 @@
 				2C5075BC1B9AEBFD000DA0DD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
