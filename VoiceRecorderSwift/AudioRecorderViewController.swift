@@ -22,7 +22,7 @@ class AudioRecorderViewController: UIViewController {
         let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask, true)
         let docsDir = dirPaths[0] as! String
         
-        let soundFilePath = docsDir.stringByAppendingPathComponent("1201temporary_record1021.caf")
+        let soundFilePath = docsDir.stringByAppendingPathComponent("1201℀temporary_record℀1021.caf")
         let soundFileURL = NSURL(fileURLWithPath: soundFilePath)!
         return soundFileURL
         }()
@@ -66,17 +66,18 @@ class AudioRecorderViewController: UIViewController {
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "beginInterruption:", name: AVAudioSessionInterruptionNotification, object: nil)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "enterBackground:", name: UIApplicationWillResignActiveNotification, object: nil)
         self.setupAudioSession()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-  
-        self.stopRecordAction(NSNull)
+        NSNotificationCenter.defaultCenter().removeObserver(self)
         
+        self.stopRecordAction(NSNull)
         self.progressTimer?.invalidate()
         self.timeTimer?.invalidate()
-        NSNotificationCenter.defaultCenter().removeObserver(self)
+        
     }
     
     
@@ -169,6 +170,34 @@ class AudioRecorderViewController: UIViewController {
         }
     }
     
+    func progressBarAction() {
+        self.audioRecorder.updateMeters()
+        let peakPowerForChannel = pow(10,(0.05 * self.audioRecorder.peakPowerForChannel(0)))
+        
+        if (peakPowerForChannel <= 1.0) {
+            audioProgressBar.progress = peakPowerForChannel
+        }
+        
+        
+    }
+    
+    
+    func timeTimerAction() {
+        
+        secondCount++
+        
+        let sec = secondCount % secondsInMinute
+        let minute = (secondCount % (secondsInMinute * secondsInMinute)) / secondsInMinute
+        let hour = secondCount / (secondsInMinute * secondsInMinute)
+        
+        recordTimeLabel.text = NSString(format: "%02d:%02d:%02d", hour, minute, sec) as String
+    }
+
+    
+    func enterBackground(notification : NSNotification) {
+        self.stopRecordAction(NSNull)
+    }
+    
     
     // MARK: - Audio Record Setup
     
@@ -255,28 +284,6 @@ class AudioRecorderViewController: UIViewController {
         
     }
     
-    func progressBarAction() {
-        self.audioRecorder.updateMeters()
-        let peakPowerForChannel = pow(10,(0.05 * self.audioRecorder.peakPowerForChannel(0)))
-        
-        if (peakPowerForChannel <= 1.0) {
-            audioProgressBar.progress = peakPowerForChannel
-        }
-
-        
-    }
-    
-    
-    func timeTimerAction() {
-        
-        secondCount++
-        
-        let sec = secondCount % secondsInMinute
-        let minute = (secondCount % (secondsInMinute * secondsInMinute)) / secondsInMinute
-        let hour = secondCount / (secondsInMinute * secondsInMinute)
-        
-        recordTimeLabel.text = NSString(format: "%02d:%02d:%02d", hour, minute, sec) as String
-    }
     
     // MARK: - AudioSessionInterruptions
     

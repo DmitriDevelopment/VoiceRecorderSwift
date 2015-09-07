@@ -60,11 +60,10 @@ class AudioPlayerViewController: UIViewController {
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
-        self.stopAudioAction(NSNull)
-        let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setActive(false, error: nil)
-        
         NSNotificationCenter.defaultCenter().removeObserver(self)
+        
+        
+        
     }
     
     // MARK: - Audio Player Lifecycle
@@ -100,9 +99,11 @@ class AudioPlayerViewController: UIViewController {
             playPauseBtn.setTitle("Play Audio", forState: UIControlState.Normal)
             self.audioPlayer.pause()
             self.timer?.invalidate()
+            previousPlaying = false
         } else {
             self.audioPlayer.play()
             playPauseBtn.setTitle("Pause Audio", forState: UIControlState.Normal)
+            previousPlaying = true
             self.timer = NSTimer.scheduledTimerWithTimeInterval(0.1, target: self, selector: "runUIIteraction", userInfo: nil, repeats: true)
         }
 
@@ -174,6 +175,7 @@ class AudioPlayerViewController: UIViewController {
         self.audioPlayer?.stop()
         self.audioPlayer?.currentTime = 0
         self.timer?.invalidate()
+        previousPlaying = false
         self.runUIIteraction()
         
     }
@@ -186,6 +188,15 @@ class AudioPlayerViewController: UIViewController {
         self.setupAudioPlayer()
         self.playPausePlayer()
     }
+    
+    @IBAction func RecordAgainAction(sender: AnyObject) {
+        
+        self.stopAudioAction(NSNull)
+        let audioSession = AVAudioSession.sharedInstance()
+        audioSession.setActive(false, error: nil)
+        
+    }
+    
     
     // MARK: - AudioSessionInterruptions
     
@@ -202,7 +213,6 @@ class AudioPlayerViewController: UIViewController {
                     dbprintln("began")
                     previousPlayingTime = self.audioPlayer.currentTime
                     playPauseBtn.setTitle("Play Audio", forState: UIControlState.Normal)
-                    previousPlaying = audioPlayer.playing
                     
                 }
             }
