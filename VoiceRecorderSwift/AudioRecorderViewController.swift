@@ -22,7 +22,7 @@ class AudioRecorderViewController: UIViewController {
         let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask, true)
         let docsDir = dirPaths[0] as! String
         
-        let soundFilePath = docsDir.stringByAppendingPathComponent("record.caf")
+        let soundFilePath = docsDir.stringByAppendingPathComponent("1201temporary_record1021.caf")
         let soundFileURL = NSURL(fileURLWithPath: soundFilePath)!
         return soundFileURL
         }()
@@ -58,23 +58,25 @@ class AudioRecorderViewController: UIViewController {
         super.viewDidLoad()
         
         self.nameTextField.delegate = self
-
+        
         
     }
     
-    deinit {
-        dbprintln("deinit record controller")
-    }
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: "beginInterruption:", name: AVAudioSessionInterruptionNotification, object: nil)
         self.setupAudioSession()
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(animated)
+  
+        self.stopRecordAction(NSNull)
+        
         self.progressTimer?.invalidate()
         self.timeTimer?.invalidate()
+        NSNotificationCenter.defaultCenter().removeObserver(self)
     }
     
     
@@ -120,57 +122,51 @@ class AudioRecorderViewController: UIViewController {
     
     @IBAction func stopRecordAction(sender: AnyObject) {
         
-        if (self.audioRecorder.recording){
-            
-            self.progressTimer?.invalidate()
-            self.timeTimer?.invalidate()
-
-            
-            self.audioRecorder.stop()
-            self.audioRecorder.meteringEnabled = false
-            
-            var error : NSError?
-            let audioSession = AVAudioSession.sharedInstance()
-            audioSession.setActive(false, error: &error)
-            
-            self.totalSeconds = self.secondCount
-            secondCount = 0;
-            
-            self.audioProgressBar.progress = 0
-            self.isRecording = false
-            
-            dbprintln("stop recording...")
-            
+        if let audioRecorder = self.audioRecorder {
+            if audioRecorder.recording {
+                
+                self.progressTimer?.invalidate()
+                self.timeTimer?.invalidate()
+                
+                
+                self.audioRecorder.stop()
+                self.audioRecorder.meteringEnabled = false
+                
+                var error : NSError?
+                let audioSession = AVAudioSession.sharedInstance()
+                audioSession.setActive(false, error: &error)
+                
+                self.totalSeconds = self.secondCount
+                secondCount = 0;
+                
+                self.audioProgressBar.progress = 0
+                self.isRecording = false
+                
+                dbprintln("stop recording...")
+                
+            }
         }
     }
     
     @IBAction func saveAudioAction(sender: AnyObject) {
         
         if self.isFileNamePermissible() && self.totalSeconds > 0 {
+            
             let timeStamp = NSDate().timeIntervalSince1970
             let audioItem = AudioItem()
             
             let name = NSString(string: nameTextField.text).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
-            let sourceFileURL = self.recordURL
-            let newFileURL = self.recordURL.URLByDeletingLastPathComponent?.URLByAppendingPathComponent("\(name).caf")
-            let fileManager = NSFileManager.defaultManager()
             
             audioItem.title = name
             audioItem.length = self.recordTimeLabel.text!
             audioItem.totalSeconds = "\(self.totalSeconds)"
             audioItem.savedTime = "\(timeStamp)"
             
-            var error : NSError?
-            if fileManager.fileExistsAtPath(sourceFileURL.path!) {
-                if fileManager.copyItemAtURL(sourceFileURL, toURL: newFileURL!, error: &error) {
-                    self.isRecordSaved = true
-                    self.audioItemList.addNewItem(audioItem)
-                    self.backAction(audioItem)
-                }
-
-            }
+            self.isRecordSaved = true
+            self.audioItemList.addNewItem(audioItem, sourceFileURL: self.recordURL)
+            self.backAction(NSNull)
+            
         }
-        
     }
     
     
@@ -188,14 +184,45 @@ class AudioRecorderViewController: UIViewController {
             dbprintln("audioSession error: \(err.localizedDescription)")
         }
         
-        if audioSession.inputAvailable {
-            self.isRecordingAvaible = true
-
-        } else {
+        let microPhoneStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
+        
+        switch microPhoneStatus {
+        case .Authorized:
+            // Has access
+            if audioSession.inputAvailable  {
+                self.isRecordingAvaible = true
+                
+            } else {
+                
+                self.showAlertController("Warning", message: "Audio input hardware not available")
+                
+            }
+        case .Denied:
+            // Microphone disabled in settings
+            let alert = UIAlertController(title: "Microphone disabled in settings", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: { (action : UIAlertAction!) -> Void in
+                self.isRecordingAvaible = false
+            }))
+//            alert.addAction(UIAlertAction(title: "Open settings", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction!) -> Void in
+//                let settingsURL = NSURL(fileURLWithPath: UIApplicationOpenSettingsURLString)
+//                UIApplication.sharedApplication().openURL(settingsURL!)
+//            }))
+            self.presentViewController(alert, animated: true, completion: nil)
             
-            self.showAlertController("Warning", message: "Audio input hardware not available")
+        case .Restricted:
+            // Microphone accsee restricted by parental controls etc
+            self.isRecordingAvaible = false
             
+        case .NotDetermined:
+            // Didn't request access yet
+            audioSession.requestRecordPermission { [unowned self] (success : Bool) -> Void in
+                self.isRecordingAvaible = success
+            }
         }
+        
+        
+        
+        
         
     }
     
@@ -251,6 +278,23 @@ class AudioRecorderViewController: UIViewController {
         recordTimeLabel.text = NSString(format: "%02d:%02d:%02d", hour, minute, sec) as String
     }
     
+    // MARK: - AudioSessionInterruptions
+    
+    func beginInterruption(notification : NSNotification) {
+        let which : AnyObject? = notification.userInfo?[AVAudioSessionInterruptionTypeKey]
+        if which != nil {
+            if let began = which! as? UInt {
+                if began == 0 {
+                    dbprintln("end")
+                } else {
+                    dbprintln("began")
+                    self.stopRecordAction(NSNull)
+                }
+            }
+        }
+        
+    }
+    
     
     
     // MARK: - Helpers
@@ -285,11 +329,9 @@ class AudioRecorderViewController: UIViewController {
         
         var error : NSError?
         let fileManager = NSFileManager.defaultManager()
-        let audioRecordsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
-        let filePath = audioRecordsPath.stringByAppendingPathComponent("record.caf")
         
-        if fileManager.fileExistsAtPath(filePath) {
-            if fileManager.removeItemAtPath(filePath, error: &error) {
+        if fileManager.fileExistsAtPath(self.recordURL.path!) {
+            if fileManager.removeItemAtPath(self.recordURL.path!, error: &error) {
                 success = true
             } else {
                 dbNSLog("Could not delete file -:\(error?.localizedDescription)")

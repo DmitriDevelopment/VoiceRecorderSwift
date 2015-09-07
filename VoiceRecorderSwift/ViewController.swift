@@ -31,16 +31,20 @@ class ViewController: UIViewController, AudioListDelegate {
         super.viewWillAppear(animated)
         self.listtable.reloadData()
         
+        
     }
     
     // MARK: - AudioListDelegate
 
     func deleteFile(name: String, success: Bool) {
+        // If need alert when file deleted successefully uncomment
+        /*
         if success {
             let alert = UIAlertController(title: "Deleted!", message: "Audio deleted successfully" , preferredStyle: UIAlertControllerStyle.Alert)
             alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
             self.presentViewController(alert, animated: true, completion: nil)
         }
+*/
         
         if let indexPath = self.deletedIndexPath {
             self.deletedIndexPath = nil
@@ -86,6 +90,19 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
 
         }
         
+        
+    }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "PlayAudioSegue" {
+            let playVC = segue.destinationViewController as! AudioPlayerViewController
+            let cell = sender as! UITableViewCell
+            let indexPath = self.listtable.indexPathForCell(cell)
+            
+            playVC.currentIndex = indexPath!.row
+        }
         
     }
 }

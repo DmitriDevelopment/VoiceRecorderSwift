@@ -18,14 +18,14 @@ class ListParser: NSObject {
     
     
     /**  Parse List from UserDefaults. */
-    func parseListFromUserDefaults<T : DictionaryConvertable >(convertedClass : T.Type) -> [DictionaryConvertable] {
+    func parseListFromUserDefaults<T : DictionaryConvertable >(T : T.Type) -> [DictionaryConvertable] {
         
         var list : [DictionaryConvertable] = []
         if let arrayList = NSUserDefaults.standardUserDefaults().objectForKey(kSaveRecordedAudioListKey) as? NSArray {
             
             for object in arrayList {
                 if let object = object as? NSDictionary {
-                    if let item = convertedClass(fromDict: object) {
+                    if let item = T(fromDict: object) {
                         list.append(item)
                     }
                 }

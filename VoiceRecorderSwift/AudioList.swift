@@ -40,33 +40,19 @@ class AudioList  {
     }
 
     
-    func addNewItem(newItem : AudioItem) {
+    func addNewItem(newItem : AudioItem, sourceFileURL : NSURL) {
+
+        let newFileURL = sourceFileURL.URLByDeletingLastPathComponent!.URLByAppendingPathComponent("\(newItem.title).caf")
+        let fileManager = NSFileManager.defaultManager()
         
-        // If we have item with the same name then replace otherwise add new
-        let items = self.convertItemsToAudioItems()
-        
-        if !items.filter({ $0.title == newItem.title }).isEmpty {
-            var oldIndex : Int?
-            for (index, item) in enumerate(items) {
-                if item.title == newItem.title {
-                    oldIndex = index
-                }
+        var error : NSError?
+        if fileManager.fileExistsAtPath(sourceFileURL.path!) {
+            if fileManager.copyItemAtURL(sourceFileURL, toURL: newFileURL, error: &error) {
+                self.items.insert(newItem, atIndex: 0)
+                self.parser.synchronizeData(self.items)
             }
-            
-            if let index = oldIndex {
-                
-                let range = Range(start: index, end: index)
-                let newItem = newItem as DictionaryConvertable
-                self.items.replaceRange(range, with: [newItem])
-                
-            }
-        } else {
-            self.items.append(newItem)
         }
-        
-        
-        self.parser.synchronizeData(self.items)
-        
+
     }
     
 
