@@ -16,6 +16,7 @@ class AudioItem : NSObject, DictionaryConvertable {
     var totalSeconds : String = ""
     var savedTime : String = ""
     
+    
     required override init() {
         super.init()
     }

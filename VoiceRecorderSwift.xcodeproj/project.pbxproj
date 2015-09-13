@@ -17,7 +17,7 @@
 		2C5075C21B9AED51000DA0DD /* AudioPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075C11B9AED51000DA0DD /* AudioPlayerViewController.swift */; };
 		2C5075C61B9AEF00000DA0DD /* RecordTableCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075C51B9AEF00000DA0DD /* RecordTableCell.swift */; };
 		2C5075C81B9AF603000DA0DD /* Database.plist in Resources */ = {isa = PBXBuildFile; fileRef = 2C5075C71B9AF603000DA0DD /* Database.plist */; };
-		2C5075CB1B9AF742000DA0DD /* Functions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075CA1B9AF742000DA0DD /* Functions.swift */; };
+		2C5075CB1B9AF742000DA0DD /* DebugFunctions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C5075CA1B9AF742000DA0DD /* DebugFunctions.swift */; };
 		2C687CB11B9B0CDD00F2BD50 /* ListParser.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */; };
 		2C687CB41B9B0D1700F2BD50 /* AudioItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB31B9B0D1700F2BD50 /* AudioItem.swift */; };
 		2C687CB61B9B0DB200F2BD50 /* AudioList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2C687CB51B9B0DB200F2BD50 /* AudioList.swift */; };
@@ -49,7 +49,7 @@
 		2C5075C11B9AED51000DA0DD /* AudioPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioPlayerViewController.swift; sourceTree = "<group>"; };
 		2C5075C51B9AEF00000DA0DD /* RecordTableCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RecordTableCell.swift; sourceTree = "<group>"; };
 		2C5075C71B9AF603000DA0DD /* Database.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Database.plist; sourceTree = "<group>"; };
-		2C5075CA1B9AF742000DA0DD /* Functions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Functions.swift; sourceTree = "<group>"; };
+		2C5075CA1B9AF742000DA0DD /* DebugFunctions.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DebugFunctions.swift; sourceTree = "<group>"; };
 		2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ListParser.swift; sourceTree = "<group>"; };
 		2C687CB31B9B0D1700F2BD50 /* AudioItem.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioItem.swift; sourceTree = "<group>"; };
 		2C687CB51B9B0DB200F2BD50 /* AudioList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AudioList.swift; sourceTree = "<group>"; };
@@ -156,7 +156,7 @@
 			isa = PBXGroup;
 			children = (
 				2C687CB71B9B120000F2BD50 /* Constants.swift */,
-				2C5075CA1B9AF742000DA0DD /* Functions.swift */,
+				2C5075CA1B9AF742000DA0DD /* DebugFunctions.swift */,
 				2C687CB01B9B0CDD00F2BD50 /* ListParser.swift */,
 			);
 			name = Helpers;
@@ -281,7 +281,7 @@
 				2C5075C01B9AED40000DA0DD /* AudioRecorderViewController.swift in Sources */,
 				2C5075C61B9AEF00000DA0DD /* RecordTableCell.swift in Sources */,
 				2C50759E1B9AEBFD000DA0DD /* AppDelegate.swift in Sources */,
-				2C5075CB1B9AF742000DA0DD /* Functions.swift in Sources */,
+				2C5075CB1B9AF742000DA0DD /* DebugFunctions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -33,7 +33,7 @@ in Build Settings
 
 func dbNSLog(message: String, function: String = __FUNCTION__, file: String = __FILE__) {
     #if DEBUG
-        var fileName = NSURL(fileURLWithPath: file)!.lastPathComponent!
+        let fileName = NSURL(fileURLWithPath: file)!.lastPathComponent!
         NSLog("file -> %@, function -> %@, message: %@", fileName, function, message)
         #else
         
