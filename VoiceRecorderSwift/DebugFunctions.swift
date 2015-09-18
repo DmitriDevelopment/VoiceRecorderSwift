@@ -15,10 +15,10 @@ Swift Compiler - Custom Flags -> Other Swift Flags
 in Build Settings
 (Working only in debug configuration)*/
 
-func dbprintln<T>(value : T) {
+func dbprint<T>(value : T) {
     
     #if DEBUG
-        println(value)
+        print(value)
         #else
         
     #endif
@@ -33,7 +33,7 @@ in Build Settings
 
 func dbNSLog(message: String, function: String = __FUNCTION__, file: String = __FILE__) {
     #if DEBUG
-        let fileName = NSURL(fileURLWithPath: file)!.lastPathComponent!
+        let fileName = NSURL(fileURLWithPath: file).lastPathComponent!
         NSLog("file -> %@, function -> %@, message: %@", fileName, function, message)
         #else
         

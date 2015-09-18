@@ -20,10 +20,10 @@ class AudioRecorderViewController: UIViewController {
     
     lazy var recordURL : NSURL = {
         let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask, true)
-        let docsDir = dirPaths[0] as! String
+        let docsDir = dirPaths[0] 
         
-        let soundFilePath = docsDir.stringByAppendingPathComponent("1201℀temporary_record℀1021.caf")
-        let soundFileURL = NSURL(fileURLWithPath: soundFilePath)!
+        let soundDirectoryURL = NSURL(fileURLWithPath: docsDir)
+        let soundFileURL = soundDirectoryURL.URLByAppendingPathComponent("1201℀temporary_record℀1021.caf")
         return soundFileURL
         }()
     
@@ -135,7 +135,12 @@ class AudioRecorderViewController: UIViewController {
                 
                 var error : NSError?
                 let audioSession = AVAudioSession.sharedInstance()
-                audioSession.setActive(false, error: &error)
+                do {
+                    try audioSession.setActive(false)
+                } catch let error1 as NSError {
+                    error = error1
+                    dbprint("error : \(error?.localizedDescription)")
+                }
                 
                 self.totalSeconds = self.secondCount
                 secondCount = 0;
@@ -143,7 +148,7 @@ class AudioRecorderViewController: UIViewController {
                 self.audioProgressBar.progress = 0
                 self.isRecording = false
                 
-                dbprintln("stop recording...")
+                dbprint("stop recording...")
                 
             }
         }
@@ -156,7 +161,7 @@ class AudioRecorderViewController: UIViewController {
             let timeStamp = NSDate().timeIntervalSince1970
             let audioItem = AudioItem()
             
-            let name = NSString(string: nameTextField.text).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
+            let name = NSString(string: nameTextField.text!).stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet())
             
             audioItem.title = name
             audioItem.length = self.recordTimeLabel.text!
@@ -207,10 +212,14 @@ class AudioRecorderViewController: UIViewController {
         var error: NSError?
         
         let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord, error: &error)
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
+        } catch let error1 as NSError {
+            error = error1
+        }
         
         if let err = error {
-            dbprintln("audioSession error: \(err.localizedDescription)")
+            dbprint("audioSession error: \(err.localizedDescription)")
         }
         
         let microPhoneStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
@@ -229,7 +238,7 @@ class AudioRecorderViewController: UIViewController {
         case .Denied:
             // Microphone disabled in settings
             let alert = UIAlertController(title: "Microphone disabled in settings", message: nil, preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: { (action : UIAlertAction!) -> Void in
+            alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: { (action : UIAlertAction) -> Void in
                 self.isRecordingAvaible = false
             }))
 //            alert.addAction(UIAlertAction(title: "Open settings", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction!) -> Void in
@@ -248,10 +257,7 @@ class AudioRecorderViewController: UIViewController {
                 self.isRecordingAvaible = success
             }
         }
-        
-        
-        
-        
+   
         
     }
     
@@ -259,23 +265,37 @@ class AudioRecorderViewController: UIViewController {
         
         let soundFileURL = self.recordURL
         
-        let recordSettings  : [NSObject : AnyObject] =  [AVEncoderAudioQualityKey: AVAudioQuality.Max.rawValue,
-            AVFormatIDKey: kAudioFormatAppleIMA4,
-            AVEncoderBitRateKey: 12800,
+        let recordSettings  =  [
+            AVEncoderAudioQualityKey: AVAudioQuality.Max.rawValue,
+            AVFormatIDKey: Int(kAudioFormatMPEG4AAC),
+            AVEncoderBitRateKey: 128000,
             AVLinearPCMBitDepthKey : 16,
-            AVNumberOfChannelsKey: 1,
+            AVNumberOfChannelsKey: 1 as NSNumber,
             AVSampleRateKey: 44100.0]
+
+        
         
         var error: NSError?
         
         let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setActive(true, error: &error)
+        do {
+            try audioSession.setActive(true)
+        } catch let error1 as NSError {
+            error = error1
+            dbprint("error : \(error?.localizedDescription)")
+        }
 
-        audioRecorder = AVAudioRecorder(URL: soundFileURL, settings: recordSettings, error: &error)
+        do {
+            audioRecorder = try AVAudioRecorder(URL: soundFileURL, settings: recordSettings)
+        } catch let error1 as NSError {
+            error = error1
+            audioRecorder = nil
+            dbprint("error : \(error?.localizedDescription)")
+        }
         self.audioRecorder.meteringEnabled = true
         
         if let err = error {
-            dbprintln("audioRecorder error: \(err.localizedDescription)")
+            dbprint("audioRecorder error: \(err.localizedDescription)")
             return false
         } else {
             audioRecorder?.prepareToRecord()
@@ -292,9 +312,9 @@ class AudioRecorderViewController: UIViewController {
         if which != nil {
             if let began = which! as? UInt {
                 if began == 0 {
-                    dbprintln("end")
+                    dbprint("end")
                 } else {
-                    dbprintln("began")
+                    dbprint("began")
                     self.stopRecordAction(NSNull)
                 }
             }
@@ -308,8 +328,8 @@ class AudioRecorderViewController: UIViewController {
     
     private func isFileNamePermissible() -> Bool {
         
-        if !self.nameTextField.text.isEmpty {
-            if audioItemList.isItemExistWithName(self.nameTextField.text) {
+        if !self.nameTextField.text!.isEmpty {
+            if audioItemList.isItemExistWithName(self.nameTextField.text!) {
                 self.showAlertController("Warning", message: "Audio name already exist! Please choose another.")
                 return false
             }
@@ -332,15 +352,15 @@ class AudioRecorderViewController: UIViewController {
     }
     
     private func deleteAudioRecordFile() {
-        var success = false
         
         var error : NSError?
         let fileManager = NSFileManager.defaultManager()
         
         if fileManager.fileExistsAtPath(self.recordURL.path!) {
-            if fileManager.removeItemAtPath(self.recordURL.path!, error: &error) {
-                success = true
-            } else {
+            do {
+                try fileManager.removeItemAtPath(self.recordURL.path!)
+            } catch let error1 as NSError {
+                error = error1
                 dbNSLog("Could not delete file -:\(error?.localizedDescription)")
             }
         } else {

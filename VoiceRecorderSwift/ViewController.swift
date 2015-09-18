@@ -48,7 +48,7 @@ class ViewController: UIViewController, AudioListDelegate {
         
         if let indexPath = self.deletedIndexPath {
             self.deletedIndexPath = nil
-            if !(self.listtable.indexPathsForVisibleRows() as! [NSIndexPath]).filter({ $0.row == indexPath.row }).isEmpty {
+            if !(self.listtable.indexPathsForVisibleRows!).filter({ $0.row == indexPath.row }).isEmpty {
                 self.listtable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
             }
         }
@@ -70,9 +70,8 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
         
         let cell = self.listtable.dequeueReusableCellWithIdentifier(kAudioListCellReuseIdentifier, forIndexPath: indexPath) as! RecordTableCell
         
-        if let audioItem = self.audioList.items[indexPath.row] as? AudioItem {
-            cell.audioItem = audioItem
-        }
+        cell.audioItem = self.audioList.items[indexPath.row]
+
         
         return cell
     }

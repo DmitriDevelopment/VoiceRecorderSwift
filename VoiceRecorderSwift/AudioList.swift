@@ -16,21 +16,20 @@ class AudioList  {
     
     static let sharedInstance = AudioList()
     
-    private  (set)var items : [DictionaryConvertable]
+    private  (set)var items : [AudioItem]
     
-    private var parser = ListParser()
+    private var parser = ListParser<AudioItem>()
     
     weak var delegate : AudioListDelegate!
     
     private init() {
-        items = parser.parseListFromUserDefaults(AudioItem)
+        items = parser.parseListFromUserDefaults()
     }
     
     // MARK: - Public methods
     
     func isItemExistWithName( name : String ) -> Bool {
         var exist = false
-        let items = self.convertItemsToAudioItems()
         if !items.filter( { $0.title == name } ).isEmpty {
             exist = true
             return exist
@@ -47,9 +46,13 @@ class AudioList  {
         
         var error : NSError?
         if fileManager.fileExistsAtPath(sourceFileURL.path!) {
-            if fileManager.copyItemAtURL(sourceFileURL, toURL: newFileURL, error: &error) {
+            do {
+                try fileManager.copyItemAtURL(sourceFileURL, toURL: newFileURL)
                 self.items.insert(newItem, atIndex: 0)
                 self.parser.synchronizeData(self.items)
+            } catch let error1 as NSError {
+                error = error1
+                dbprint("error : \(error?.localizedDescription)")
             }
         }
 
@@ -59,11 +62,9 @@ class AudioList  {
     
     func deleteItemAtIndex(index : Int) {
         if self.items.endIndex >= index {
-            if let item = self.items[index] as? AudioItem {
-                let fileName = item.title
-                self.items.removeAtIndex(index)
-                self.deleteAudioRecordFile(fileName)
-            }
+            let fileName = items[index].title
+            self.items.removeAtIndex(index)
+            self.deleteAudioRecordFile(fileName)
             
             self.parser.synchronizeData(self.items)
             
@@ -78,13 +79,16 @@ class AudioList  {
         
         var error : NSError?
         let fileManager = NSFileManager.defaultManager()
-        let audioRecordsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0] as! String
-        let filePath = audioRecordsPath.stringByAppendingPathComponent(fileName + ".caf")
+        let audioRecordsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
+        let audioRecordsURL = NSURL(fileURLWithPath: audioRecordsPath)
+        let fileURL = audioRecordsURL.URLByAppendingPathComponent(fileName + ".caf")
         
-        if fileManager.fileExistsAtPath(filePath) {
-            if fileManager.removeItemAtPath(filePath, error: &error) {
+        if fileManager.fileExistsAtPath(fileURL.path!) {
+            do {
+                try fileManager.removeItemAtPath(fileURL.path!)
                 success = true
-            } else {
+            } catch let error1 as NSError {
+                error = error1
                 dbNSLog("Could not delete file -:\(error?.localizedDescription)")
             }
         } else {
@@ -97,19 +101,7 @@ class AudioList  {
     }
     
     
-    private func convertItemsToAudioItems() -> [AudioItem] {
-        
-        var convertedItems : [AudioItem] = []
-        for newItem in self.items {
-            if let newItem = newItem as? AudioItem {
-                convertedItems.append(newItem)
-            }
-        }
- 
-        return convertedItems
-        
-    }
-
+   
     
     
     

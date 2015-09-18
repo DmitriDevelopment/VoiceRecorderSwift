@@ -19,8 +19,8 @@ class AudioPlayerViewController: UIViewController {
     
     lazy var directoryURL : NSURL = {
         let dirPaths = NSSearchPathForDirectoriesInDomains(.DocumentDirectory,.UserDomainMask, true)
-        let docsDir = dirPaths[0] as! String
-        let directiryURL = NSURL(fileURLWithPath: docsDir)!
+        let docsDir = dirPaths[0] 
+        let directiryURL = NSURL(fileURLWithPath: docsDir)
         return directiryURL
         }()
     
@@ -50,11 +50,19 @@ class AudioPlayerViewController: UIViewController {
         
         var error : NSError?
         let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setCategory(AVAudioSessionCategoryPlayback, error: &error)
-        audioSession.setActive(true, error: &error)
+        do {
+            try audioSession.setCategory(AVAudioSessionCategoryPlayback)
+        } catch let error1 as NSError {
+            error = error1
+        }
+        do {
+            try audioSession.setActive(true)
+        } catch let error1 as NSError {
+            error = error1
+        }
         
         if error != nil {
-            dbprintln("Error activate audio session: \(error?.localizedDescription)")
+            dbprint("Error activate audio session: \(error?.localizedDescription)")
         }
     }
     
@@ -69,17 +77,21 @@ class AudioPlayerViewController: UIViewController {
     // MARK: - Audio Player Lifecycle
     
     func setupAudioPlayer() {
-        let audioItem = self.audioList.items[currentIndex] as! AudioItem
+        let audioItem = self.audioList.items[currentIndex] 
         self.audioNameLabel.text = audioItem.title
         
-        let audioTotalSecond = "00:00:00"
         audioRemainLengthLabel.text = "-\(audioItem.length)"
         
         
         let audioFileURL = self.directoryURL.URLByAppendingPathComponent("\(audioItem.title).caf")
         
+        
         self.timer?.invalidate()
-        self.audioPlayer = AVAudioPlayer(contentsOfURL: audioFileURL, error: nil)
+        do {
+            try self.audioPlayer = AVAudioPlayer(contentsOfURL: audioFileURL)
+        } catch {
+            dbprint("we have some errors in setup player")
+        }
         self.audioPlayer.delegate = self
         self.audioPlayer.volume = 1.0
         self.audioPlayer.prepareToPlay()
@@ -133,7 +145,7 @@ class AudioPlayerViewController: UIViewController {
     
     func convertCurrentTimeToString(currentTime : Double, duration : Double, current : Bool) -> String {
         
-        var secondsCount =  current ? Int(currentTime) : Int(duration - currentTime)
+        let secondsCount =  current ? Int(currentTime) : Int(duration - currentTime)
         
         let sec = secondsCount % secondsInMinute
         let minute = (secondsCount % (secondsInMinute * secondsInMinute)) / secondsInMinute
@@ -193,7 +205,10 @@ class AudioPlayerViewController: UIViewController {
         
         self.stopAudioAction(NSNull)
         let audioSession = AVAudioSession.sharedInstance()
-        audioSession.setActive(false, error: nil)
+        do {
+            try audioSession.setActive(false)
+        } catch _ {
+        }
         
     }
     
@@ -205,12 +220,12 @@ class AudioPlayerViewController: UIViewController {
         if which != nil {
             if let began = which! as? UInt {
                 if began == 0 {
-                    dbprintln("end")
+                    dbprint("end")
                     self.audioPlayer.currentTime = self.previousPlayingTime
                     if previousPlaying { self.playPausePlayer() }
 
                 } else {
-                    dbprintln("began")
+                    dbprint("began")
                     previousPlayingTime = self.audioPlayer.currentTime
                     playPauseBtn.setTitle("Play Audio", forState: UIControlState.Normal)
                     
@@ -228,7 +243,7 @@ class AudioPlayerViewController: UIViewController {
 
 extension AudioPlayerViewController : AVAudioPlayerDelegate {
     
-    func audioPlayerDidFinishPlaying(player: AVAudioPlayer!, successfully flag: Bool) {
+    func audioPlayerDidFinishPlaying(player: AVAudioPlayer, successfully flag: Bool) {
         if flag {
             self.nextAudioAction(NSNull)
         }

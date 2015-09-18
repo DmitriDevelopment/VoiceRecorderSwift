@@ -14,18 +14,18 @@ protocol DictionaryConvertable : NSObjectProtocol {
 }
 
 
-class ListParser: NSObject {
+class ListParser<ParsedItem : DictionaryConvertable >: NSObject {
     
     
     /**  Parse List from UserDefaults. */
-    func parseListFromUserDefaults<T : DictionaryConvertable >(T : T.Type) -> [DictionaryConvertable] {
+    func parseListFromUserDefaults() -> [ParsedItem] {
         
-        var list : [DictionaryConvertable] = []
+        var list : [ParsedItem] = []
         if let arrayList = NSUserDefaults.standardUserDefaults().objectForKey(kSaveRecordedAudioListKey) as? NSArray {
             
             for object in arrayList {
                 if let object = object as? NSDictionary {
-                    if let item = T(fromDict: object) {
+                    if let item = ParsedItem.init(fromDict: object) {
                         list.append(item)
                     }
                 }
@@ -37,9 +37,9 @@ class ListParser: NSObject {
 
     
     /** Syncronize data with User Defaults */
-    func synchronizeData(items : [DictionaryConvertable]) {
+    func synchronizeData(items : [ParsedItem]) {
         
-        var savedArray = NSMutableArray()
+        let savedArray = NSMutableArray()
         for item in items {
             let dictionaryItem = item.encodeToDictionary()
             savedArray.addObject(dictionaryItem)
