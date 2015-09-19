@@ -10,7 +10,7 @@ import UIKit
 
 let kAudioListCellReuseIdentifier = "AudioListCell"
 
-class ViewController: UIViewController, AudioListDelegate {
+class ViewController: UIViewController {
     
     @IBOutlet weak var listtable : UITableView!
     var audioList : AudioList!
@@ -23,7 +23,6 @@ class ViewController: UIViewController, AudioListDelegate {
         
         // create our data model
         self.audioList = AudioList.sharedInstance
-        self.audioList.delegate = self
         
     }
     
@@ -34,27 +33,19 @@ class ViewController: UIViewController, AudioListDelegate {
         
     }
     
-    // MARK: - AudioListDelegate
-
-    func deleteFile(name: String, success: Bool) {
-        // If need alert when file deleted successefully uncomment
-        /*
-        if success {
-            let alert = UIAlertController(title: "Deleted!", message: "Audio deleted successfully" , preferredStyle: UIAlertControllerStyle.Alert)
-            alert.addAction(UIAlertAction(title: "OK", style: UIAlertActionStyle.Default, handler: nil))
-            self.presentViewController(alert, animated: true, completion: nil)
-        }
-*/
-        
-        if let indexPath = self.deletedIndexPath {
-            self.deletedIndexPath = nil
-            if !(self.listtable.indexPathsForVisibleRows!).filter({ $0.row == indexPath.row }).isEmpty {
-                self.listtable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
-            }
+    
+    // MARK: - Navigation
+    
+    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
+        if segue.identifier == "PlayAudioSegue" {
+            let playVC = segue.destinationViewController as! AudioPlayerViewController
+            let cell = sender as! UITableViewCell
+            let indexPath = self.listtable.indexPathForCell(cell)
+            
+            playVC.currentIndex = indexPath!.row
         }
         
     }
-
 
 }
 
@@ -86,25 +77,13 @@ extension ViewController : UITableViewDataSource, UITableViewDelegate {
         if editingStyle == UITableViewCellEditingStyle.Delete {
             self.deletedIndexPath = indexPath
             self.audioList.deleteItemAtIndex(indexPath.row)
-
+            self.listtable.deleteRowsAtIndexPaths([indexPath], withRowAnimation: UITableViewRowAnimation.Fade)
         }
         
         
     }
     
-    // MARK: - Navigation
-    
-    override func prepareForSegue(segue: UIStoryboardSegue, sender: AnyObject?) {
-        if segue.identifier == "PlayAudioSegue" {
-            let playVC = segue.destinationViewController as! AudioPlayerViewController
-            let cell = sender as! UITableViewCell
-            let indexPath = self.listtable.indexPathForCell(cell)
-            
-            playVC.currentIndex = indexPath!.row
-        }
-        
-    }
-}
+  }
 
 
 
