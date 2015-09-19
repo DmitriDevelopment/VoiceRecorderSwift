@@ -13,7 +13,7 @@ protocol DictionaryConvertable : NSObjectProtocol {
     func encodeToDictionary() -> NSDictionary
 }
 
-
+// test changes
 class ListParser<ParsedItem : DictionaryConvertable >: NSObject {
     
     
