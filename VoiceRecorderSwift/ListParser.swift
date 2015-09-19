@@ -15,6 +15,7 @@ protocol DictionaryConvertable : NSObjectProtocol {
 
 // test changes
 // new feature brunch
+// new
 class ListParser<ParsedItem : DictionaryConvertable >: NSObject {
     
     
