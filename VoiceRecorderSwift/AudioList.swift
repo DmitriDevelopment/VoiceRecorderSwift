@@ -44,15 +44,13 @@ class AudioList  {
         let newFileURL = sourceFileURL.URLByDeletingLastPathComponent!.URLByAppendingPathComponent("\(newItem.title).caf")
         let fileManager = NSFileManager.defaultManager()
         
-        var error : NSError?
         if fileManager.fileExistsAtPath(sourceFileURL.path!) {
             do {
                 try fileManager.copyItemAtURL(sourceFileURL, toURL: newFileURL)
                 self.items.insert(newItem, atIndex: 0)
                 self.parser.synchronizeData(self.items)
-            } catch let error1 as NSError {
-                error = error1
-                dbprint("error : \(error?.localizedDescription)")
+            } catch let error as NSError {
+                dbprint("error : \(error.localizedDescription)")
             }
         }
 
@@ -77,7 +75,6 @@ class AudioList  {
     private func deleteAudioRecordFile(fileName : String) {
         var success = false
         
-        var error : NSError?
         let fileManager = NSFileManager.defaultManager()
         let audioRecordsPath = NSSearchPathForDirectoriesInDomains(.DocumentDirectory, .UserDomainMask, true)[0]
         let audioRecordsURL = NSURL(fileURLWithPath: audioRecordsPath)
@@ -87,9 +84,8 @@ class AudioList  {
             do {
                 try fileManager.removeItemAtPath(fileURL.path!)
                 success = true
-            } catch let error1 as NSError {
-                error = error1
-                dbNSLog("Could not delete file -:\(error?.localizedDescription)")
+            } catch let error as NSError {
+                dbNSLog("Could not delete file -:\(error.localizedDescription)")
             }
         } else {
             dbNSLog("\(fileName) file doesn't exist in document directory")

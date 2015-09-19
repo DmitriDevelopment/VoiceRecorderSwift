@@ -48,22 +48,19 @@ class AudioPlayerViewController: UIViewController {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: "beginInterruption:", name: AVAudioSessionInterruptionNotification, object: nil)
         
-        var error : NSError?
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayback)
-        } catch let error1 as NSError {
-            error = error1
-        }
-        do {
-            try audioSession.setActive(true)
-        } catch let error1 as NSError {
-            error = error1
+        } catch let error as NSError {
+            dbprint("Error set category audio session: \(error.localizedDescription)")
         }
         
-        if error != nil {
-            dbprint("Error activate audio session: \(error?.localizedDescription)")
+        do {
+            try audioSession.setActive(true)
+        } catch let error as NSError {
+            dbprint("Error activate audio session: \(error.localizedDescription)")
         }
+
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -205,10 +202,10 @@ class AudioPlayerViewController: UIViewController {
         
         self.stopAudioAction(NSNull)
         let audioSession = AVAudioSession.sharedInstance()
-        do {
-            try audioSession.setActive(false)
-        } catch _ {
-        }
+
+        try! audioSession.setActive(false)
+
+
         
     }
     

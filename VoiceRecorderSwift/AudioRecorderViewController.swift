@@ -133,13 +133,11 @@ class AudioRecorderViewController: UIViewController {
                 self.audioRecorder.stop()
                 self.audioRecorder.meteringEnabled = false
                 
-                var error : NSError?
                 let audioSession = AVAudioSession.sharedInstance()
                 do {
                     try audioSession.setActive(false)
-                } catch let error1 as NSError {
-                    error = error1
-                    dbprint("error : \(error?.localizedDescription)")
+                } catch let error as NSError {
+                    dbprint("error : \(error.localizedDescription)")
                 }
                 
                 self.totalSeconds = self.secondCount
@@ -209,18 +207,13 @@ class AudioRecorderViewController: UIViewController {
     func setupAudioSession() {
         
         
-        var error: NSError?
-        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setCategory(AVAudioSessionCategoryPlayAndRecord)
-        } catch let error1 as NSError {
-            error = error1
+        } catch let error as NSError {
+            dbprint("audioSession error: \(error.localizedDescription)")
         }
         
-        if let err = error {
-            dbprint("audioSession error: \(err.localizedDescription)")
-        }
         
         let microPhoneStatus = AVCaptureDevice.authorizationStatusForMediaType(AVMediaTypeAudio)
         
@@ -241,10 +234,10 @@ class AudioRecorderViewController: UIViewController {
             alert.addAction(UIAlertAction(title: "Ok", style: UIAlertActionStyle.Cancel, handler: { (action : UIAlertAction) -> Void in
                 self.isRecordingAvaible = false
             }))
-//            alert.addAction(UIAlertAction(title: "Open settings", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction!) -> Void in
-//                let settingsURL = NSURL(fileURLWithPath: UIApplicationOpenSettingsURLString)
-//                UIApplication.sharedApplication().openURL(settingsURL!)
-//            }))
+            alert.addAction(UIAlertAction(title: "Open settings", style: UIAlertActionStyle.Default, handler: { (action : UIAlertAction!) -> Void in
+                let settingsURL = NSURL(fileURLWithPath: UIApplicationOpenSettingsURLString)
+                UIApplication.sharedApplication().openURL(settingsURL)
+            }))
             self.presentViewController(alert, animated: true, completion: nil)
             
         case .Restricted:
@@ -274,33 +267,26 @@ class AudioRecorderViewController: UIViewController {
             AVSampleRateKey: 44100.0]
 
         
-        
-        var error: NSError?
-        
         let audioSession = AVAudioSession.sharedInstance()
         do {
             try audioSession.setActive(true)
-        } catch let error1 as NSError {
-            error = error1
-            dbprint("error : \(error?.localizedDescription)")
+        } catch let error as NSError {
+            dbprint("error : \(error.localizedDescription)")
         }
 
         do {
             audioRecorder = try AVAudioRecorder(URL: soundFileURL, settings: recordSettings)
-        } catch let error1 as NSError {
-            error = error1
+        } catch let error as NSError {
             audioRecorder = nil
-            dbprint("error : \(error?.localizedDescription)")
+            dbprint("error : \(error.localizedDescription)")
+            return false
         }
         self.audioRecorder.meteringEnabled = true
         
-        if let err = error {
-            dbprint("audioRecorder error: \(err.localizedDescription)")
-            return false
-        } else {
-            audioRecorder?.prepareToRecord()
-            return true
-        }
+        
+        audioRecorder?.prepareToRecord()
+        return true
+        
         
     }
     
@@ -353,15 +339,13 @@ class AudioRecorderViewController: UIViewController {
     
     private func deleteAudioRecordFile() {
         
-        var error : NSError?
         let fileManager = NSFileManager.defaultManager()
         
         if fileManager.fileExistsAtPath(self.recordURL.path!) {
             do {
                 try fileManager.removeItemAtPath(self.recordURL.path!)
-            } catch let error1 as NSError {
-                error = error1
-                dbNSLog("Could not delete file -:\(error?.localizedDescription)")
+            } catch let error as NSError {
+                dbNSLog("Could not delete file -:\(error.localizedDescription)")
             }
         } else {
             dbNSLog("file doesn't exist in document directory")
