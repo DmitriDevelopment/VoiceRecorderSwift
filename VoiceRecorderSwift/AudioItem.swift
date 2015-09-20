@@ -36,6 +36,8 @@ class AudioItem : NSObject, DictionaryConvertable {
     }
     
     
+    // encode method
+    
     func encodeToDictionary() -> NSDictionary {
         
         let dict = NSMutableDictionary()
