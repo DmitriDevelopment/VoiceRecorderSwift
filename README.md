@@ -1,4 +1,4 @@
-# Test the IOS SDK.
+## Test the IOS SDK.
 
 #### 1. Download and install the latest version of Xcode. (Make sure you have a Developer Certificate).    [Xcode](https://developer.apple.com/xcode/downloads/)
 
